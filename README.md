@@ -1,1 +1,3 @@
-## Игра 21 очко
+## Simple blackjack game
+
+in the development...

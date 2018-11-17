@@ -145,9 +145,9 @@ func main() {
 			// fmt.Println(player.Name + " got: ")
 			show.Card(card)
 			// fmt.Println(player.Name + "'s hand: ")
-			// show.Hand(player.Hand)
+			show.Hand(player.Hand)
 
-			fmt.Printf("%+v\n", player)
+			//fmt.Printf("%+v\n", player)
 
 			if game.Players[i].Point > 21 {
 				fmt.Println(player.Name + " lose!!")
