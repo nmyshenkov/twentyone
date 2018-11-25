@@ -2,14 +2,22 @@ package show
 
 import "fmt"
 
+//Card - print one player's card
 func Card(card string) {
 	fmt.Print("┏---┓\n|" + card + "|\n┗---┛\n")
 }
 
+//PrintDelimetr - print delimetr
 func PrintDelimetr() {
-	fmt.Print("-------------------------\n")
+	fmt.Print("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\n")
 }
 
+//ColorPrint - beautiful text out
+func ColorPrint(text, attr string) {
+	fmt.Print("\x1b[" + attr + "m" + text + "\x1b[0m")
+}
+
+//Hand - print player's hand
 func Hand(hand []string) {
 	var firstStr string
 	var secondStr string
@@ -33,10 +41,9 @@ func Hand(hand []string) {
 //▒▒▒▒
 //
 
+//
 //  ┏----┓
 //  ┃⑩  ┃
 //  ┃  ♥ ┃
 //  ┗----┛
-//
-//
 //

@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"twentyone/show"
 )
+
 //getCommand - get command
 func getCommand() bool {
 	var command string
@@ -51,8 +52,8 @@ func isEndGame(g Game) bool {
 
 func main() {
 
-	fmt.Print("\nWelcome to \"21\" Game!!!\n\n")
-	fmt.Print("How many players will be play?\n")
+	show.ColorPrint("\nWelcome to \"21\" Game!!!\n\n", "1;33")
+	show.ColorPrint("How many players will be play? ", "4")
 
 	var playerCount int
 
