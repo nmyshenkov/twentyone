@@ -17,6 +17,11 @@ func ColorPrint(text, attr string) {
 	fmt.Print("\x1b[" + attr + "m" + text + "\x1b[0m")
 }
 
+//GetColorText - return color text
+func GetColorText(text, attr string) string {
+	return "\x1b[" + attr + "m" + text + "\x1b[0m"
+}
+
 //Hand - print player's hand
 func Hand(hand []string) {
 	var firstStr string

@@ -32,7 +32,7 @@ func isEndGame(g Game) bool {
 	}
 
 	if g.PlayersCount == g.PlayersLose {
-		fmt.Println("All players lost!! Game over")
+		show.ColorPrint("All players lost!! Game over\n", "31")
 		return true
 	}
 
@@ -43,7 +43,7 @@ func isEndGame(g Game) bool {
 				g.isWon = p
 			}
 		}
-		fmt.Println("Player " + g.isWon.Name + " WON with " + strconv.Itoa(g.isWon.Point) + " points!!!")
+		show.ColorPrint("Player "+g.isWon.Name+" WON with "+strconv.Itoa(g.isWon.Point)+" points!!!\n", "32")
 		return true
 	}
 
@@ -62,7 +62,7 @@ func main() {
 	game := Game{}
 
 	for i := 0; i < playerCount; i++ {
-		game.AddPlayer("Player" + strconv.Itoa(i))
+		game.AddPlayer("Player" + strconv.Itoa(i+1))
 	}
 	game.Start()
 	game.Turn = 1
@@ -108,10 +108,10 @@ func main() {
 			show.Hand(game.Players[i].Hand)
 
 			if game.Players[i].Point > 21 {
-				fmt.Println(player.Name + " lose!!")
+				show.ColorPrint(player.Name+" lose with "+strconv.Itoa(game.Players[i].Point)+" points!!!\n", "31")
 				game.Players[i].isLose = true
 				game.PlayersLose++
-				break
+				continue
 			}
 		}
 
