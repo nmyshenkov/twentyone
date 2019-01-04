@@ -1,6 +1,14 @@
 package show
 
-import "fmt"
+import (
+	"fmt"
+)
+
+//ColorRed - green
+const ColorRed = "31"
+
+//ColorGreen - green
+const ColorGreen = "32"
 
 //Card - print one player's card
 func Card(card string) {

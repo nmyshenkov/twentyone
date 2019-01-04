@@ -26,13 +26,12 @@ func getCommand() bool {
 }
 
 //isEndGame - check ending game
-func isEndGame(g Game) bool {
+func isEndGame(g *Game) bool {
 	if g.isEnded {
 		return true
 	}
 
 	if g.PlayersCount == g.PlayersLose {
-		show.ColorPrint("All players lost!! Game over\n", "31")
 		return true
 	}
 
@@ -43,7 +42,7 @@ func isEndGame(g Game) bool {
 				g.isWon = p
 			}
 		}
-		show.ColorPrint("Player "+g.isWon.Name+" WON with "+strconv.Itoa(g.isWon.Point)+" points!!!\n", "32")
+		show.ColorPrint("Player "+g.isWon.Name+" WON with "+strconv.Itoa(g.isWon.Point)+" points!!!\n", show.ColorGreen)
 		return true
 	}
 
@@ -69,12 +68,11 @@ func main() {
 
 	for {
 
-		if isEndGame(game) == true {
+		if isEndGame(&game) == true {
 			game.isEnded = true
 		}
 
 		if game.isEnded == true {
-			fmt.Println("GAME OVER!!")
 			break
 		}
 
@@ -108,7 +106,7 @@ func main() {
 			show.Hand(game.Players[i].Hand)
 
 			if game.Players[i].Point > 21 {
-				show.ColorPrint(player.Name+" lose with "+strconv.Itoa(game.Players[i].Point)+" points!!!\n", "31")
+				show.ColorPrint(player.Name+" lose with "+strconv.Itoa(game.Players[i].Point)+" points!!!\n", show.ColorRed)
 				game.Players[i].isLose = true
 				game.PlayersLose++
 				continue
@@ -120,5 +118,24 @@ func main() {
 		}
 
 		game.Turn++
+	}
+
+	fmt.Println("\n Results: ")
+	for _, player := range game.Players {
+		resultString := fmt.Sprintf("\t%s has: %d points\n", player.Name, player.Point)
+
+		if game.isWon.Name == player.Name {
+			show.ColorPrint(resultString, show.ColorGreen)
+		} else if player.Point > 21 {
+			show.ColorPrint(resultString, show.ColorRed)
+		} else {
+			fmt.Print(resultString)
+		}
+	}
+
+	if game.isWon.Name == "" {
+		show.ColorPrint("\nAll players lost!!\n▒▒GAME OVER!!▒▒\n", show.ColorRed)
+	} else {
+		fmt.Println("\n▒▒GAME OVER!!▒▒")
 	}
 }
