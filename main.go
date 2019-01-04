@@ -56,7 +56,15 @@ func main() {
 
 	var playerCount int
 
-	fmt.Scan(&playerCount)
+	for {
+		fmt.Scan(&playerCount)
+
+		if playerCount > 0 {
+			break
+		}
+
+		show.ColorPrint("Wrong count. Please enter number greater than 0.\n", show.ColorRed)
+	}
 
 	game := Game{}
 
