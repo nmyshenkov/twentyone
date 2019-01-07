@@ -19,31 +19,53 @@ type Player struct {
 
 //Game - struct for main game
 type Game struct {
-	Pack         Cards
-	Players      []Player
-	PlayersCount int
-	PlayersLose  int
-	PlayersEnd   int
-	Turn         int
-	isEnded      bool
-	isWon        Player
+	Pack          Cards
+	PlayerIDs     []int
+	Players       map[int]*Player
+	PlayersInGame []int
+	PlayersCount  int
+	PlayersLose   int
+	PlayersEnd    int
+	Turn          int
+	isEnded       bool
+	isWon         Player
+}
+
+//Init - init struct
+func (g *Game) Init() {
+	g.Players = make(map[int]*Player)
 }
 
 //AddPlayer - add new player to game
 func (g *Game) AddPlayer(Name string) {
-	g.Players = append(g.Players, Player{
+
+	id := len(g.Players) + 1
+
+	g.Players[id] = &Player{
 		Name: Name,
-	})
+	}
+	g.PlayerIDs = append(g.PlayerIDs, id)
+	g.PlayersInGame = append(g.PlayersInGame, id)
 	g.PlayersCount++
 }
 
-//GetEndPlayers - get slice with end game players
-func (g *Game) GetEndPlayers() []Player {
-	var players []Player
+//LosePlayer - mark who lose in the game
+func (g *Game) LosePlayer(id int) {
+	for i, el := range g.PlayersInGame {
+		if el == id {
+			g.PlayersInGame = append(g.PlayersInGame[:i], g.PlayersInGame[i+1:]...)
+			break
+		}
+	}
+}
 
-	for _, p := range g.Players {
+//GetEndPlayers - get slice with end game players
+func (g *Game) GetEndPlayers() map[int]*Player {
+	players := make(map[int]*Player)
+
+	for i, p := range g.Players {
 		if p.isEnd == true {
-			players = append(players, p)
+			players[i] = p
 		}
 	}
 
@@ -54,6 +76,17 @@ func (g *Game) GetEndPlayers() []Player {
 func (g *Game) Start() {
 	g.Pack.Init()
 	g.Pack.CreateDeck()
+
+	var startCards = 2
+	var card string
+	var point int
+
+	for i := 0; i < startCards; i++ {
+		for i, player := range g.Players {
+			card, point = g.Pack.GetCard()
+			g.Players[i].Point, g.Players[i].Hand = player.Point+point, append(player.Hand, card)
+		}
+	}
 }
 
 //Init - inizialization values for deck

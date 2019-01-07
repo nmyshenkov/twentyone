@@ -35,14 +35,20 @@ func isEndGame(g *Game) bool {
 		return true
 	}
 
+	if len(g.PlayersInGame) == 1 {
+		g.Players[g.PlayersInGame[0]].isEnd = true
+		g.PlayersEnd++
+	}
+
 	if g.PlayersCount == g.PlayersEnd+g.PlayersLose {
 		playerEnds := g.GetEndPlayers()
 		for _, p := range playerEnds {
 			if p.Point > g.isWon.Point {
-				g.isWon = p
+				g.isWon = *p
+				show.ColorPrint("Player "+g.isWon.Name+" WON with "+strconv.Itoa(g.isWon.Point)+" points!!!\n", show.ColorGreen)
+				break
 			}
 		}
-		show.ColorPrint("Player "+g.isWon.Name+" WON with "+strconv.Itoa(g.isWon.Point)+" points!!!\n", show.ColorGreen)
 		return true
 	}
 
@@ -67,6 +73,7 @@ func main() {
 	}
 
 	game := Game{}
+	game.Init()
 
 	for i := 0; i < playerCount; i++ {
 		game.AddPlayer("Player" + strconv.Itoa(i+1))
@@ -86,7 +93,9 @@ func main() {
 
 		fmt.Println("Turn: " + strconv.Itoa(game.Turn))
 
-		for i, player := range game.Players {
+		for _, id := range game.PlayerIDs {
+
+			player := game.Players[id]
 
 			if player.isLose == true || player.isEnd == true {
 				continue
@@ -94,10 +103,13 @@ func main() {
 
 			show.PrintDelimetr()
 
+			fmt.Println(player.Name + "'s hand: ")
+			show.Hand(game.Players[id].Hand)
+
 			fmt.Println(player.Name + " points: " + strconv.Itoa(player.Point) + ". Get one more card?")
 
 			if getCommand() == false {
-				game.Players[i].isEnd = true
+				game.Players[id].isEnd = true
 				game.PlayersEnd++
 				continue
 			}
@@ -106,19 +118,20 @@ func main() {
 			var point int
 
 			card, point = game.Pack.GetCard()
-			game.Players[i].Point, game.Players[i].Hand = player.Point+point, append(player.Hand, card)
+			game.Players[id].Point, game.Players[id].Hand = player.Point+point, append(player.Hand, card)
 
 			fmt.Println(player.Name + " got: ")
 			show.Card(card)
-			fmt.Println(player.Name + "'s hand: ")
-			show.Hand(game.Players[i].Hand)
 
-			if game.Players[i].Point > 21 {
-				show.ColorPrint(player.Name+" lose with "+strconv.Itoa(game.Players[i].Point)+" points!!!\n", show.ColorRed)
-				game.Players[i].isLose = true
+			if game.Players[id].Point > 21 {
+				show.ColorPrint(player.Name+" lose with "+strconv.Itoa(game.Players[id].Point)+" points!!!\n", show.ColorRed)
+				game.Players[id].isLose = true
 				game.PlayersLose++
+				game.LosePlayer(id)
 				continue
 			}
+
+			show.ColorPrint(player.Name+" points: "+strconv.Itoa(game.Players[id].Point)+"\n", "36")
 		}
 
 		if playerCount == game.PlayersLose {
